@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>HQ Control</title>
+    <style>
+        body { font-family: sans-serif; background: #1a1a1a; color: white; text-align: center; padding-top: 50px; }
+        .box { background: #333; padding: 20px; border-radius: 10px; display: inline-block; width: 300px; }
+        button { width: 100%; padding: 15px; margin: 10px 0; cursor: pointer; border: none; border-radius: 5px; font-weight: bold; }
+        .red { background: #ff4757; color: white; }
+        .green { background: #2ed573; color: white; }
+        #log { color: #eccc68; font-size: 12px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h3>التحكم المركزي</h3>
+        <button class="red" onclick="sendCmd('GO BACK')">إرسال: عُد للمخيم</button>
+        <button class="green" onclick="sendCmd('NONE')">مسح التنبيه</button>
+        <div id="log">في انتظار الأوامر...</div>
+    </div>
+
+    <script>
+        // الرابط الموحد (تأكد أن الرابط ينتهي بـ command.json)
+        const url = "https://realtime-database-d35ec-default-rtdb.firebaseio.com/command.json";
+
+        function sendCmd(txt) {
+            document.getElementById('log').innerText = "جاري الإرسال...";
+            fetch(url, {
+                method: 'PUT',
+                body: JSON.stringify(txt)
+            })
+            .then(() => document.getElementById('log').innerText = "تم الإرسال: " + txt)
+            .catch(() => document.getElementById('log').innerText = "فشل الاتصال بـ Firebase");
+        }
+    </script>
+</body>
+</html>
